@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShipmentController;
 use App\Models\Products;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -14,3 +15,5 @@ Route::controller(ProductController::class)->prefix('product')->name('product.')
     Route::post('/create', 'create')->name('create');
     Route::get('/flush', 'flush')->name('flush');
 });
+
+Route::resource('shipments', ShipmentController::class);
