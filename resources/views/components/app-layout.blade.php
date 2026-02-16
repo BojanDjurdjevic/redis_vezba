@@ -32,6 +32,7 @@
                     <nav class="space-x-6 text-sm font-medium">
                         <a href="/" class="hover:text-indigo-600 transition">Home</a>
                         <a href="/shipments" class="hover:text-indigo-600 transition">Shipments</a>
+                        <a href="/shipments/create" class="hover:text-indigo-600 transition">Create Shipments</a>
                         <a href="#" class="hover:text-indigo-600 transition">About</a>
                         <a href="#" class="hover:text-indigo-600 transition">Contact</a>
                     </nav>
