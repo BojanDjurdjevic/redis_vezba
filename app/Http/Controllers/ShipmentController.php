@@ -6,6 +6,7 @@ use App\Models\Shipments;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentCreateRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ShipmentController extends Controller
 {
@@ -14,9 +15,9 @@ class ShipmentController extends Controller
      */
     public function index()
     {
-        return view('shipments.index', [
-            'shipments' => Shipments::all()
-        ]);
+        $shipments = Cache::remember('unassignedShipments', 360, 
+        fn() => Shipments::where('status', Shipments::STATUS_UNASSIGNED)->get());
+        return view('shipments.index', compact('shipments'));
     }
 
     /**
@@ -36,15 +37,18 @@ class ShipmentController extends Controller
         $user_id = auth()->id ?? 1;
         
         Shipments::create([...$request->validated(), 'user_id' => $user_id]);
-        return redirect('/shipments');
+
+        Cache::forget('unassignedShipments');
+
+        return redirect()->route('shipments.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Shipments $shipments)
+    public function show(Shipments $shipment)
     {
-        //
+        return view('shipments.show', compact('shipment'));
     }
 
     /**

@@ -7,8 +7,8 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             @forelse ($shipments as $shipment)
-                <div class="bg-white shadow-md rounded-2xl p-6 hover:shadow-xl transition duration-300">
-
+            <a href="{{ route('shipments.show', $shipment) }}"
+                class="block bg-white shadow-lg rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-200">
                     {{-- Title --}}
                     <h2 class="text-xl font-semibold mb-2">
                         {{ $shipment->title }}
@@ -36,7 +36,7 @@
                         @elseif($shipment->status === 'in_progress') bg-blue-100 text-blue-800
                         @elseif($shipment->status === 'completed') bg-green-100 text-green-800
                         @elseif($shipment->status === 'problem') bg-red-100 text-red-800
-                        @elseif($shipment->status === 'problem') bg-yellow-100 text-yellow-800
+                        @elseif($shipment->status === 'unassigned') bg-yellow-100 text-yellow-800
                         @endif
                         "
                     >
@@ -47,8 +47,7 @@
                     <p class="text-gray-500 text-sm mt-4">
                         {{ Str::limit($shipment->details, 100) }}
                     </p>
-
-                </div>
+                </a>
             @empty
                 <p class="text-gray-500">Nema pošiljki.</p>
             @endforelse
