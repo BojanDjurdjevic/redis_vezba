@@ -78,9 +78,15 @@
                 </div>
                 <label for="status" class="block text-sm font-medium mb-1">Status:</label>
                 <select type="hidden" name="status" id="status" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" >
-                    <option value="Pending">Pending</option>
-                    <option value="Active">Active</option>
-                    <option value="Delivered">Delivered</option>
+                    <!--
+                    <option value="in_progress">In progress</option>
+                    <option value="unassigned">Unassigned</option>
+                    <option value="problem">Problem</option>
+                    <option value="completed">Completed</option>
+                    -->
+                    @foreach (\App\Models\Shipments::ALLOWED_STATUSES as $status)
+                         <option value="{{ $status }}">{{ strtoupper($status) }}</option>                       
+                    @endforeach
                 </select>
 
                 {{-- DETAILS --}}

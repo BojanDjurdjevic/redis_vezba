@@ -28,7 +28,7 @@ class ShipmentCreateRequest extends FormRequest
             'to_city' => 'required|string|min:3', 
             'to_country' => 'required|string|min:3', 
             'price' => 'required|integer|gt:0',
-            'status' => 'required|string', 
+            'status' => 'required|in:in_progress,unassigned,problem,completed', 
             'details' => 'required|string',
         ];
     }
