@@ -46,7 +46,9 @@ class ProfileController extends Controller
     public function changeAvatar(NewAvatarRequest $request)
     {
         
-        $this->uploadImage($request->file('profile_image'));
+        $name = $this->uploadImage($request->file('profile_image', ), 'images/avatars');
+
+        Auth::user()->update(['avatar' => $name]); 
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

@@ -10,7 +10,7 @@ use Intervention\Image\ImageManager;
 
 trait  HandleImageUpload
 {
-    public function uploadImage($request)
+    public function uploadImage($request, $path)
     {
         $avatar = Auth::user()->avatar;
         if($avatar !== null) {
@@ -27,8 +27,8 @@ trait  HandleImageUpload
 
         $image = $manager->read($file)->toWebp(85); // prepakujemo u Webp
 
-        Storage::disk('public')->put("images/avatars/$name", (string) $image); 
+        Storage::disk('public')->put("$path/$name", (string) $image); // images/avatars
 
-        Auth::user()->update(['avatar' => $name]);   
+        return $name;  
     }
 }
