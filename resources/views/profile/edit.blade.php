@@ -15,6 +15,9 @@
 
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
+                    <div class="rounded-4xl shadow-lg overflow-hidden w-36">
+                        <img src="/storage/images/avatars/{{ \Illuminate\Support\Facades\Auth::user()->avatar }}" alt="Profilna slika">
+                    </div>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                         Postavi sliku
                     </h1>
