@@ -13,11 +13,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen flex flex-col bg-gray-100 text-gray-800">
+<body class="min-h-screen flex flex-col dark:bg-gray-800 text-white">
 
     {{-- HEADER --}}
     @if ($showHeader)
-        <header class="bg-white shadow-md">
+        <header class="dark:bg-gray-800 text-white shadow-md">
             <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
 
                 <div class="text-xl font-bold text-indigo-600">

@@ -12,8 +12,17 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('homepage')" :active="request()->routeIs('homepage')">
+                        {{ __('Home') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('shipments.index')" :active="request()->routeIs('shipments.index')">
+                        {{ __('Shipments') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('shipments.create')" :active="request()->routeIs('shipments.create')">
+                        {{ __('Create Shipment') }}
                     </x-nav-link>
                 </div>
             </div>

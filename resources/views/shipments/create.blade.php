@@ -2,7 +2,7 @@
 
     <div class="max-w-3xl mx-auto">
 
-        <div class="bg-white shadow-lg rounded-2xl p-8">
+        <div class="dark:bg-gray-800 text-white shadow-lg rounded-2xl p-8">
 
             <h1 class="text-2xl font-bold mb-6">Kreiraj pošiljku</h1>
 
@@ -102,8 +102,8 @@
                 {{-- SUBMIT --}}
                 <div>
                     <button type="submit"
-                        class="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold
-                               hover:bg-indigo-700 transition duration-200 shadow-md hover:shadow-lg">
+                        class="w-full bg-purple-700 text-white py-3 rounded-xl font-semibold
+                               hover:bg-purple-900 transition duration-200 shadow-md hover:shadow-lg">
                         Sačuvaj pošiljku
                     </button>
                 </div>

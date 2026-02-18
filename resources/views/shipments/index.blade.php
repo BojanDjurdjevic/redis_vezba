@@ -2,20 +2,20 @@
 
     <div class="max-w-6xl mx-auto py-8 px-4">
 
-        <h1 class="text-3xl font-bold mb-6">Shipments</h1>
+        <h1 class="text-3xl text-white font-bold mb-6">Shipments</h1>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             @forelse ($shipments as $shipment)
             <a href="{{ route('shipments.show', $shipment) }}"
-                class="block bg-white shadow-lg rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-200">
+                class="block bg-purple-900 text-white shadow-lg rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-200">
                     {{-- Title --}}
                     <h2 class="text-xl font-semibold mb-2">
                         {{ $shipment->title }}
                     </h2>
 
                     {{-- Route --}}
-                    <p class="text-gray-600 text-sm mb-2">
+                    <p class="text-white text-sm mb-2">
                         {{ $shipment->from_city }}, {{ $shipment->from_country }}
                         →
                         {{ $shipment->to_city }}, {{ $shipment->to_country }}
@@ -44,7 +44,7 @@
                     </span>
 
                     {{-- Details --}}
-                    <p class="text-gray-500 text-sm mt-4">
+                    <p class="text-white text-sm mt-4">
                         {{ Str::limit($shipment->details, 100) }}
                     </p>
                 </a>
