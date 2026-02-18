@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shipments;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentCreateRequest;
+use App\Models\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,7 +16,7 @@ class ShipmentController extends Controller
     public function index()
     {
         $shipments = Cache::remember('unassignedShipments', 360, 
-        fn() => Shipments::where('status', Shipments::STATUS_UNASSIGNED)->get());
+        fn() => Shipment::where('status', Shipment::STATUS_UNASSIGNED)->get());
         return view('shipments.index', compact('shipments'));
     }
 
@@ -36,7 +36,7 @@ class ShipmentController extends Controller
         
         $user_id = auth()->id ?? 1;
         
-        Shipments::create([...$request->validated(), 'user_id' => $user_id]);
+        Shipment::create([...$request->validated(), 'user_id' => $user_id]);
 
         Cache::forget('unassignedShipments');
 
@@ -46,7 +46,7 @@ class ShipmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Shipments $shipment)
+    public function show(Shipment $shipment)
     {
         return view('shipments.show', compact('shipment'));
     }
@@ -54,7 +54,7 @@ class ShipmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Shipments $shipments)
+    public function edit(Shipment $shipments)
     {
         //
     }
@@ -62,7 +62,7 @@ class ShipmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shipments $shipments)
+    public function update(Request $request, Shipment $shipments)
     {
         //
     }
@@ -70,7 +70,7 @@ class ShipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Shipments $shipments)
+    public function destroy(Shipment $shipments)
     {
         //
     }
