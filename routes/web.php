@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShipmentController;
-use App\Models\Products;
-use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[ HomeController::class, 'index'])->name('homepage');
@@ -17,3 +15,19 @@ Route::controller(ProductController::class)->prefix('product')->name('product.')
 });
 
 Route::resource('shipments', ShipmentController::class);
+/*
+Route::get('/', function () {
+    return view('welcome');
+}); */
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
