@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewAvatarRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,9 +38,10 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function changeAvatar(Request $request)
+    public function changeAvatar(NewAvatarRequest $request)
     {
-        dd($request->all());
+        $filePath = $request->file('profile_image')
+            ->store('images', 'public');
     }
 
     /**

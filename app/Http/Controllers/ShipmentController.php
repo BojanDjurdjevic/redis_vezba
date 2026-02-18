@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentCreateRequest;
 use App\Models\Shipment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class ShipmentController extends Controller
@@ -33,8 +34,10 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentCreateRequest $request)
     {
-        
-        $user_id = auth()->id ?? 1;
+        if(!Auth::user()) {
+            return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
+        } 
+        $user_id = Auth::id();
         
         Shipment::create([...$request->validated(), 'user_id' => $user_id]);
 
