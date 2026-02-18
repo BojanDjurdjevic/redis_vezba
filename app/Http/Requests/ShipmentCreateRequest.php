@@ -30,6 +30,8 @@ class ShipmentCreateRequest extends FormRequest
             'price' => 'required|integer|gt:0',
             'status' => 'required|in:in_progress,unassigned,problem,completed', 
             'details' => 'required|string',
+            'documents' => 'required|array',
+            'documents.*' => 'file|mimes:png,jpg,jpeg,webp,pdf,doc,docx|max:10240',
         ];
     }
 }

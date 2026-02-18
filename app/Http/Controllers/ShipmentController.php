@@ -8,6 +8,9 @@ use App\Models\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+
+use function PHPUnit\Framework\matches;
 
 class ShipmentController extends Controller
 {
@@ -34,12 +37,36 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentCreateRequest $request)
     {
+        $user_id = Auth::id();
+        $shipment = Shipment::create([...$request->validated(), 'user_id' => $user_id]);
+
+        $fileTypes = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+        //dd($request->validated());
+        $images = [];
+        $docs = [];
+
+        foreach($request->file('documents') as $file) {
+            if(str_starts_with($file->getMimeType(), 'image/')) {
+                $images[] = $file;
+            } elseif(in_array($file->getMimeType(), $fileTypes)) {
+                $extension = $file->getClientOriginalExtension();
+                $filename = uniqid(). "." . $extension;
+
+                $path = $file->storeAs("documents/{$shipment->id}", $filename, 'public');
+
+                $docs[] = $file;
+            } else {
+                return redirect()->back()->with('error', 'Svi fajlovi moraju biti ispravnog i dozvoljenog formata!');
+            }
+        }
+        dd($images);
         if(!Auth::user()) {
             return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
-        } 
-        $user_id = Auth::id();
-        
-        Shipment::create([...$request->validated(), 'user_id' => $user_id]);
+        }        
 
         Cache::forget('unassignedShipments');
 
