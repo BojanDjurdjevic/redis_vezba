@@ -109,7 +109,6 @@ class ShipmentController extends Controller
      */
     public function update(UpdateShipmentRequest $request, Shipment $shipment)
     {
-        dd($request->validated());
         $shipment->update($request->validated());
 
         return redirect()->back()->with('success', 'Uspešno ste izmenili pošiljku!');

@@ -1,48 +1,58 @@
 <x-app-layout title="Shipment Details">
 
-    <div class="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl">
+    <div class="dark:bg-gray-700 text-white max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl">
 
         <h1 class="text-3xl font-bold mb-6 text-center">Detalji pošiljke</h1>
 
         <div class="space-y-4">
 
-            <div class="flex justify-between bg-gray-100 p-4 rounded-lg">
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Naslov:</span>
                 <span>{{ $shipment->title }}</span>
             </div>
 
-            <div class="flex justify-between bg-gray-100 p-4 rounded-lg">
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Od:</span>
                 <span>{{ $shipment->from_city }}, {{ $shipment->from_country }}</span>
             </div>
 
-            <div class="flex justify-between bg-gray-100 p-4 rounded-lg">
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Do:</span>
                 <span>{{ $shipment->to_city }}, {{ $shipment->to_country }}</span>
             </div>
 
-            <div class="flex justify-between bg-gray-100 p-4 rounded-lg">
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Cena:</span>
                 <span>{{ number_format($shipment->price, 0, ',', '.') }} RSD</span>
             </div>
 
-            <div class="flex justify-between bg-gray-100 p-4 rounded-lg">
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Status:</span>
                 <span class="capitalize">{{ $shipment->status }}</span>
             </div>
 
-            <div class="bg-gray-100 p-4 rounded-lg">
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
+                <span class="font-semibold">Primalac:</span>
+                <span class="capitalize {{ $shipment->user->name ?? 'text-red-600' }}">{{ $shipment->user->name ??  'Nije naznačeno'}}</span>
+            </div>
+
+            <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
+                <span class="font-semibold">Dostavljač:</span>
+                <span class="capitalize {{ $shipment->trucker->name ? '' : 'text-red-600' }}">{{ $shipment->trucker->name ?? 'Nije izabran' }}</span>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Detalji:</span>
                 <p class="mt-2">{{ $shipment->details }}</p>
             </div>
 
             @forelse ($shipment->documents as $document)
-                <div class="bg-gray-100 p-4 rounded-lg">
+                <div class="bg-gray-800 p-4 rounded-lg">
                     <span class="font-semibold">Dokumenta:</span>
                     <p class="mt-2"><a target="_blank" href="/storage/documents/{{ $document->document_name }}">{{ $document->document_name }}</a></p>
                 </div>
             @empty
-                <div class="bg-gray-100 p-4 rounded-lg">
+                <div class="bg-gray-800 p-4 rounded-lg">
                     <p>Nema dokumenata</p>
                 </div>
             @endforelse

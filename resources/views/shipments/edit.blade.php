@@ -144,9 +144,13 @@
                     <select name="user_id" id="user_id" class="w-full border rounded-lg px-4 py-2 
                             focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
                     >
-                        <option value="{{ $shipment->user_id ?? '' }}">Izaberi vozača</option>
+                        @if (!$shipment->user_id)
+                            <option value="">Izaberi vozača</option>
+                        @endif
+                        
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}"
+                                {{ $user->id === $shipment->trucker->id ? 'selected' : ''}}
                                 class="text-indigo-600"
                             >{{ $user->name }}</option>                       
                         @endforeach
@@ -158,7 +162,7 @@
                 
                 {{-- CLIENT --}}
                 <div>
-                    <label for="client_id" class="block text-sm font-medium mb-1">Vozač:</label>
+                    <label for="client_id" class="block text-sm font-medium mb-1">Klijent:</label>
                     <select name="client_id" id="client_id" class="w-full border rounded-lg px-4 py-2 
                             focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
                     >
