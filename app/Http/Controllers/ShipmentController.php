@@ -34,6 +34,7 @@ class ShipmentController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Shipment::class);
         $users = User::all();
         return view('shipments.create', compact('users'));
     }
@@ -103,6 +104,7 @@ class ShipmentController extends Controller
      */
     public function edit(Shipment $shipment)
     {
+        Gate::authorize('create', Shipment::class);
         $users = User::all();
         return view('shipments.edit', compact('shipment', 'users'));
     }
@@ -112,6 +114,7 @@ class ShipmentController extends Controller
      */
     public function update(UpdateShipmentRequest $request, Shipment $shipment)
     {
+        Gate::authorize('create', Shipment::class);
         $shipment->update($request->validated());
 
         return redirect()->back()->with('success', 'Uspešno ste izmenili pošiljku!');
