@@ -61,4 +61,9 @@ class ShipmentPolicy
     {
         return false;
     }
+
+    public function canViewPage(User $user)
+    {
+        return $user->role === User::ROLE_ADMINISTRATOR;
+    }
 }
