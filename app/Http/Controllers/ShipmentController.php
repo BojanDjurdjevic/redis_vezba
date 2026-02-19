@@ -96,9 +96,9 @@ class ShipmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Shipment $shipments)
+    public function edit(Shipment $shipment)
     {
-        //
+        return view('shipments.edit', compact('shipment'));
     }
 
     /**
