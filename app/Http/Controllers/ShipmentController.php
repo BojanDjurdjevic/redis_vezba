@@ -12,6 +12,7 @@ use App\Traits\HandleImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\matches;
@@ -33,7 +34,8 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        return view('shipments.create');
+        $users = User::all();
+        return view('shipments.create', compact('users'));
     }
 
     /**
@@ -41,12 +43,13 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentCreateRequest $request)
     {
-        // OSTAVLJAM ovde logiku za user auth i vađenje ID - ako zatreba...
         /*
-        if(!Auth::user()) {
-            return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
-        } 
-        $user_id = Auth::id(); */
+        if(Auth::user()->role !== User::ROLE_ADMINISTRATOR) {
+            return redirect()->route('login')->with('error', 'Niste autorizovani da kreirate shipment!');
+        } */
+
+        Gate::authorize('create', Shipment::class);
+
         $shipment = Shipment::create($request->validated()); // uklonio user_id i spread operator [...validated(), user_id]
 
         $fileTypes = [

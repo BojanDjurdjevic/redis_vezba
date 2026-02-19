@@ -107,7 +107,7 @@
                     <option value="completed">Completed</option>
                     -->
                     @foreach (\App\Models\Shipment::ALLOWED_STATUSES as $status)
-                         <option value="{{ $status }}">{{ strtoupper($status) }}</option>                       
+                         <option class="text-indigo-600" value="{{ $status }}">{{ strtoupper($status) }}</option>                       
                     @endforeach
                 </select>
 
