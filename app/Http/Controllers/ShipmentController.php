@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentCreateRequest;
 use App\Models\Shipment;
+use App\Models\ShipmentDocuments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -58,12 +59,17 @@ class ShipmentController extends Controller
 
                 $path = $file->storeAs("documents/{$shipment->id}", $filename, 'public');
 
-                $docs[] = $file;
+                $path = str_replace('documents/', "", $path);
+
+                ShipmentDocuments::create([
+                    'shipment_id' => $shipment->id,
+                    'document_name' => $path
+                ]);
             } else {
                 return redirect()->back()->with('error', 'Svi fajlovi moraju biti ispravnog i dozvoljenog formata!');
             }
         }
-        dd($images);
+        //dd($images);
         if(!Auth::user()) {
             return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
         }        
