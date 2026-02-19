@@ -53,4 +53,9 @@ class Shipment extends Model
         return $this->hasMany(ShipmentDocuments::class);
     }
 
+    public function driver()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

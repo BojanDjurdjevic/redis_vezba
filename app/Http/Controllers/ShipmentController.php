@@ -7,6 +7,7 @@ use App\Http\Requests\ShipmentCreateRequest;
 use App\Http\Requests\UpdateShipmentRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentDocuments;
+use App\Models\User;
 use App\Traits\HandleImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,7 +100,8 @@ class ShipmentController extends Controller
      */
     public function edit(Shipment $shipment)
     {
-        return view('shipments.edit', compact('shipment'));
+        $users = User::all();
+        return view('shipments.edit', compact('shipment', 'users'));
     }
 
     /**
@@ -107,6 +109,7 @@ class ShipmentController extends Controller
      */
     public function update(UpdateShipmentRequest $request, Shipment $shipment)
     {
+        dd($request->validated());
         $shipment->update($request->validated());
 
         return redirect()->back()->with('success', 'Uspešno ste izmenili pošiljku!');

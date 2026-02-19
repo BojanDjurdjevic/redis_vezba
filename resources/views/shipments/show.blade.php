@@ -47,11 +47,16 @@
                 </div>
             @endforelse
 
-            <div class="flex justify-center mt-6">
+            <div class="flex justify-evenly mt-6">
                 <a href="{{ route('shipments.index') }}"
                    class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-semibold
                           hover:bg-indigo-700 transition duration-200 shadow-md hover:shadow-lg">
                     Nazad na listu
+                </a>
+                <a href="{{ route('shipments.edit', $shipment) }}"
+                   class="bg-rose-600 text-white px-6 py-2 rounded-xl font-semibold
+                          hover:bg-rose-500 transition duration-200 shadow-md hover:shadow-lg">
+                    Izmeni pošiljku
                 </a>
             </div>
 
