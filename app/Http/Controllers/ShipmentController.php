@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentCreateRequest;
+use App\Http\Requests\UpdateShipmentRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentDocuments;
 use App\Traits\HandleImageUpload;
@@ -104,9 +105,11 @@ class ShipmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shipment $shipments)
+    public function update(UpdateShipmentRequest $request, Shipment $shipment)
     {
-        //
+        $shipment->update($request->validated());
+
+        return redirect()->back()->with('success', 'Uspešno ste izmenili pošiljku!');
     }
 
     /**

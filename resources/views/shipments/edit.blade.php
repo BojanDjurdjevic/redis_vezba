@@ -6,8 +6,9 @@
 
             <h1 class="text-2xl font-bold mb-6">Kreiraj pošiljku</h1>
 
-            <form action="{{ route('shipments.store') }}" enctype="multipart/form-data" method="POST" class="space-y-6">
+            <form action="{{ route('shipments.update', $shipment) }}" enctype="multipart/form-data" method="POST" class="space-y-6">
                 @csrf
+                @method('PUT')
                 {{-- TITLE --}}
                 <div>
                     <label for="title" class="block text-sm font-medium mb-1">Naslov</label>
@@ -132,7 +133,7 @@
                     <button type="submit"
                         class="w-full bg-purple-700 text-white py-3 rounded-xl font-semibold
                                hover:bg-purple-900 transition duration-200 shadow-md hover:shadow-lg">
-                        Sačuvaj pošiljku
+                        Izmeni pošiljku
                     </button>
                 </div>
 

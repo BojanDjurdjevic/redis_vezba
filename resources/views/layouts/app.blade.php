@@ -27,6 +27,8 @@
                 </header>
             @endisset
 
+            @include('components.session-message')
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}
