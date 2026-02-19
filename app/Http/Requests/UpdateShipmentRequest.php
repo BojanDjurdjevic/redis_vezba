@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\UserTrucker;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -21,10 +22,14 @@ class UpdateShipmentRequest extends FormRequest
             'details' => 'required|string',
             'user_id' => [
                 'required',
-                Rule::exists('users', 'id')->where(function ($query) {
-                    $query->where('role', User::ROLE_TRUCKER);
-                })
+                new UserTrucker()
             ]
         ];
     }
 }
+
+/** AKO NEMAMO RULE:
+* Rule::exists('users', 'id')->where(function ($query) {
+*    $query->where('role', User::ROLE_TRUCKER);
+* })
+ */
