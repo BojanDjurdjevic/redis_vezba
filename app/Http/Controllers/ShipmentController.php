@@ -39,20 +39,19 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentCreateRequest $request)
     {
+        // OSTAVLJAM ovde logiku za user auth i vađenje ID - ako zatreba...
+        /*
         if(!Auth::user()) {
             return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
         } 
-        $user_id = Auth::id();
-        $shipment = Shipment::create([...$request->validated(), 'user_id' => $user_id]);
+        $user_id = Auth::id(); */
+        $shipment = Shipment::create($request->validated()); // uklonio user_id i spread operator [...validated(), user_id]
 
         $fileTypes = [
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ];
-        //dd($request->validated());
-        $images = [];
-        $docs = [];
 
         foreach($request->file('documents') as $file) {
             if(str_starts_with($file->getMimeType(), 'image/')) {
