@@ -27,7 +27,7 @@ class Shipment extends Model
     protected $fillable = [
         'title', 'from_city', 'from_country',
         'to_city', 'to_country', 'price',
-        'status', 'user_id', 'details',
+        'status', 'user_id', 'details', 'client_id',
     ];
 
     public static function booted()

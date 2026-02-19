@@ -156,6 +156,23 @@
                     @enderror
                 </div>
                 
+                {{-- CLIENT --}}
+                <div>
+                    <label for="client_id" class="block text-sm font-medium mb-1">Vozač:</label>
+                    <select name="client_id" id="client_id" class="w-full border rounded-lg px-4 py-2 
+                            focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
+                    >
+                        <option value="{{ $shipment->client_id ?? '' }}" selected>Promeni klijenta</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}"
+                                class="text-indigo-600"
+                            >{{ $user->name }}</option>                       
+                        @endforeach
+                    </select>
+                    @error('client_id')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 {{-- SUBMIT --}}
                 <div>
