@@ -2,8 +2,6 @@
 
     <div class="max-w-3xl mx-auto">
 
-        
-
         <div class="dark:bg-gray-800 text-white shadow-lg rounded-2xl p-8 mt-6">
 
             <a href="{{ route('shipments.show', $shipment) }}"
@@ -13,6 +11,10 @@
             </a>
 
             <h1 class="text-2xl font-bold m-6">Ažuriraj pošiljku</h1>
+
+            @error($errors->any())
+                <p class="text-red-500 text-sm mt-1">{{ $errors->first() }}</p>
+            @enderror
 
             <form action="{{ route('shipments.update', $shipment) }}" enctype="multipart/form-data" method="POST" class="space-y-6">
                 @csrf
@@ -136,18 +138,24 @@
                     @enderror
                 </div>
 
-                {{-- DRIVER --}}
-                <label for="status" class="block text-sm font-medium mb-1">Vozač:</label>
-                <select name="status" id="status" class="w-full border rounded-lg px-4 py-2 
-                        focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
-                >
-                    <option value="{{ $shipment->user_id ?? '' }}">Izaberi vozača</option>
-                    @foreach ($users as $user)
-                         <option value="{{ $user->id }}"
-                            class="text-indigo-600"
-                         >{{ $user->name }}</option>                       
-                    @endforeach
-                </select>
+                {{-- TRUCKER --}}
+                <div>
+                    <label for="user_id" class="block text-sm font-medium mb-1">Vozač:</label>
+                    <select name="user_id" id="user_id" class="w-full border rounded-lg px-4 py-2 
+                            focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
+                    >
+                        <option value="{{ $shipment->user_id ?? '' }}">Izaberi vozača</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}"
+                                class="text-indigo-600"
+                            >{{ $user->name }}</option>                       
+                        @endforeach
+                    </select>
+                    @error('user_id')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                
 
                 {{-- SUBMIT --}}
                 <div>
