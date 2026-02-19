@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentCreateRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentDocuments;
+use App\Traits\HandleImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -15,9 +16,9 @@ use function PHPUnit\Framework\matches;
 
 class ShipmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    use HandleImageUpload;
+
     public function index()
     {
         $shipments = Cache::remember('unassignedShipments', 360, 
@@ -55,7 +56,14 @@ class ShipmentController extends Controller
 
         foreach($request->file('documents') as $file) {
             if(str_starts_with($file->getMimeType(), 'image/')) {
-                $images[] = $file;
+                $name = $this->uploadImage($file, "documents/$shipment->id");
+
+                $name = $shipment->id . "/" . $name;
+
+                ShipmentDocuments::create([
+                    'shipment_id' => $shipment->id,
+                    'document_name' => $name
+                ]);
             } elseif(in_array($file->getMimeType(), $fileTypes)) {
                 $extension = $file->getClientOriginalExtension();
                 $filename = uniqid(). "." . $extension;

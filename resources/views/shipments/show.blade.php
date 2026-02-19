@@ -39,7 +39,7 @@
             @forelse ($shipment->documents as $document)
                 <div class="bg-gray-100 p-4 rounded-lg">
                     <span class="font-semibold">Dokumenta:</span>
-                    <p class="mt-2">{{ $document->document_name }}</p>
+                    <p class="mt-2"><a target="_blank" href="/storage/documents/{{ $document->document_name }}">{{ $document->document_name }}</a></p>
                 </div>
             @empty
                 <div class="bg-gray-100 p-4 rounded-lg">
