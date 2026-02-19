@@ -36,4 +36,9 @@ class Shipment extends Model
         $this->attributes['status'] = $status;
     }
 
+    public function documents()
+    {
+        return $this->hasMany(ShipmentDocuments::class);
+    }
+
 }

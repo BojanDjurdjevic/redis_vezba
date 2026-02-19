@@ -38,6 +38,9 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentCreateRequest $request)
     {
+        if(!Auth::user()) {
+            return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
+        } 
         $user_id = Auth::id();
         $shipment = Shipment::create([...$request->validated(), 'user_id' => $user_id]);
 
@@ -68,11 +71,7 @@ class ShipmentController extends Controller
             } else {
                 return redirect()->back()->with('error', 'Svi fajlovi moraju biti ispravnog i dozvoljenog formata!');
             }
-        }
-        //dd($images);
-        if(!Auth::user()) {
-            return redirect()->route('login')->with('error', 'Molimo Vas da se ulogujete kako biste kreirali pošiljku!');
-        }        
+        }    
 
         Cache::forget('unassignedShipments');
 

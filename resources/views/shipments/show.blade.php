@@ -36,6 +36,17 @@
                 <p class="mt-2">{{ $shipment->details }}</p>
             </div>
 
+            @forelse ($shipment->documents as $document)
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <span class="font-semibold">Dokumenta:</span>
+                    <p class="mt-2">{{ $document->document_name }}</p>
+                </div>
+            @empty
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <p>Nema dokumenata</p>
+                </div>
+            @endforelse
+
             <div class="flex justify-center mt-6">
                 <a href="{{ route('shipments.index') }}"
                    class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-semibold
