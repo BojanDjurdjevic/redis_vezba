@@ -22,6 +22,10 @@ class ShipmentPolicy
      */
     public function view(User $user, Shipment $shipment): bool
     {
+        if($user->role === User::ROLE_ADMINISTRATOR || $user->id === $shipment->client_id) {
+            return true;
+        }
+
         return false;
     }
 

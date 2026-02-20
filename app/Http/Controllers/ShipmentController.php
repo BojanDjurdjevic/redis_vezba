@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateShipmentRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentDocuments;
 use App\Models\User;
+use App\Policies\ShipmentPolicy;
 use App\Traits\HandleImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,6 +97,7 @@ class ShipmentController extends Controller
      */
     public function show(Shipment $shipment)
     {
+        Gate::authorize('view', $shipment);
         return view('shipments.show', compact('shipment'));
     }
 
