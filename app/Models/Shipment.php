@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\ShipmentObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+
+#[ObservedBy([ShipmentObserver::class])]
 class Shipment extends Model
 {
     use HasFactory;
@@ -30,6 +34,7 @@ class Shipment extends Model
         'status', 'user_id', 'details', 'client_id',
     ];
 
+    /* // Ostavljam da imam primer pre Observer-a
     public static function booted()
     {
         static::created(function($shipment) {
@@ -42,6 +47,7 @@ class Shipment extends Model
 
         static::deleted(fn($shipment)=> Cache::forget('unassigned_shipments')); 
     }
+    */
 
     public function setStatusAttribute($status)
     {

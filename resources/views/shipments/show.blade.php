@@ -38,24 +38,23 @@
 
             <div class="flex justify-between bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Dostavljač:</span>
-                <span class="capitalize {{ $shipment->trucker->name ? '' : 'text-red-600' }}">{{ $shipment->trucker->name ?? 'Nije izabran' }}</span>
+                <span class="capitalize {{ $shipment->trucker->name ?? 'text-red-600' }}">{{ $shipment->trucker->name ?? 'Nije izabran' }}</span>
             </div>
 
             <div class="bg-gray-800 p-4 rounded-lg">
                 <span class="font-semibold">Detalji:</span>
                 <p class="mt-2">{{ $shipment->details }}</p>
             </div>
-
-            @forelse ($shipment->documents as $document)
-                <div class="bg-gray-800 p-4 rounded-lg">
-                    <span class="font-semibold">Dokumenta:</span>
-                    <p class="mt-2"><a target="_blank" href="/storage/documents/{{ $document->document_name }}">{{ $document->document_name }}</a></p>
-                </div>
-            @empty
-                <div class="bg-gray-800 p-4 rounded-lg">
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <span class="font-semibold">Dokumenta:</span>
+                @forelse ($shipment->documents as $document)
+                    
+                        <p class="mt-2"><a target="_blank" href="/storage/documents/{{ $document->document_name }}">{{ $document->document_name }}</a></p>
+                    
+                @empty
                     <p>Nema dokumenata</p>
-                </div>
-            @endforelse
+                @endforelse
+            </div>
 
             <div class="flex justify-evenly mt-6">
                 <a href="{{ route('shipments.index') }}"

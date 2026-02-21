@@ -90,8 +90,6 @@ class ShipmentController extends Controller
             }
         }    
 
-        Cache::forget('unassignedShipments');
-
         return redirect()->route('shipments.index');
     }
 

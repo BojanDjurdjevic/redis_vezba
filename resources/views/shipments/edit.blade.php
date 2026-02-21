@@ -150,7 +150,10 @@
                         
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}"
-                                {{ $user->id === $shipment->trucker->id ? 'selected' : ''}}
+                                @if (isset($shipment->trucker->id))
+                                    {{ $user->id === $shipment->trucker->id ? 'selected' : ''}}
+                                @endif
+                                
                                 class="text-indigo-600"
                             >{{ $user->name }}</option>                       
                         @endforeach
