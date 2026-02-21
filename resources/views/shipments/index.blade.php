@@ -65,7 +65,7 @@
                                 
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}"
-                                        {{ $user->id === $shipment->trucker->id ? 'selected' : ''}}
+
                                         class="text-indigo-600"
                                     >{{ $user->name }}</option>                       
                                 @endforeach

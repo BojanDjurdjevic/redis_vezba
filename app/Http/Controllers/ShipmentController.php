@@ -137,12 +137,14 @@ class ShipmentController extends Controller
     {
         $request->validate(['user_id' => 'required|exists:users,id']);
 
+        //dd($request->user_id);
+
         $shipment->user_id = $request->user_id;
         $shipment->status = Shipment::STATUS_IN_PROGRESS;
         $shipment->save();
 
         //Cache::forget('unassignedShipments');
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Uspešno ste dodelili pošiljku!');
     }
 }
