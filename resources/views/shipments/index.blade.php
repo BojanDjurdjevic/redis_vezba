@@ -7,10 +7,13 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             @forelse ($shipments as $shipment)
-            <a href="{{ route('shipments.show', $shipment) }}"
+            <div
                 class="block bg-purple-900 text-white shadow-lg rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-200">
+                    <a href="{{ route('shipments.show', $shipment) }}"
+                        class="text-rose-600 mt-3 mb-3"
+                    >Pogledaj pošiljku</a>
                     {{-- Title --}}
-                    <h2 class="text-xl font-semibold mb-2">
+                    <h2 class="text-xl font-semibold mb-2 mt-3">
                         {{ $shipment->title }}
                     </h2>
 
@@ -33,7 +36,7 @@
                         @elseif($shipment->status === 'shipped') bg-blue-100 text-blue-800
                         @elseif($shipment->status === 'delivered') bg-green-100 text-green-800
                         @elseif($shipment->status === 'cancelled') bg-red-100 text-red-800
-                        @elseif($shipment->status === 'in_progress') bg-blue-100 text-blue-800
+                        @elseif($shipment->status === 'started') bg-blue-100 text-blue-800
                         @elseif($shipment->status === 'completed') bg-green-100 text-green-800
                         @elseif($shipment->status === 'problem') bg-red-100 text-red-800
                         @elseif($shipment->status === 'unassigned') bg-yellow-100 text-yellow-800
@@ -47,7 +50,35 @@
                     <p class="text-white text-sm mt-4">
                         {{ Str::limit($shipment->details, 100) }}
                     </p>
-                </a>
+                    
+                    <br />
+                    <div>
+                        <form action="{{ route('shipments.assignUser', $shipment) }}" method="POST">
+                            @csrf
+                            <label for="user_id" class="block text-sm font-medium mb-1">Vozač:</label>
+                            <select name="user_id" id="user_id" class="w-full border rounded-lg px-4 py-2 
+                                    focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
+                            >
+                                @if (!$shipment->user_id)
+                                    <option value="" disabled>Izaberi vozača</option>
+                                @endif
+                                
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ $user->id === $shipment->trucker->id ? 'selected' : ''}}
+                                        class="text-indigo-600"
+                                    >{{ $user->name }}</option>                       
+                                @endforeach
+                            </select>
+                            @error('user_id')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                            <button type="submit"
+                                class="text-white bg-indigo-600 p-3 mt-3 rounded-lg shadow-md hover:bg-indigo-500 w-full"
+                            >Dodeli</button>
+                        </form>
+                    </div>
+                </div>
             @empty
                 <p class="text-gray-500">Nema pošiljki.</p>
             @endforelse

@@ -10,6 +10,7 @@ use App\Models\ShipmentDocuments;
 use App\Models\User;
 use App\Policies\ShipmentPolicy;
 use App\Traits\HandleImageUpload;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -25,9 +26,11 @@ class ShipmentController extends Controller
 
     public function index()
     {
+        $users = User::where('role', 'trucker')->get();
+
         $shipments = Cache::remember('unassignedShipments', 360, 
-        fn() => Shipment::where('status', Shipment::STATUS_UNASSIGNED)->get());
-        return view('shipments.index', compact('shipments'));
+        fn() => Shipment::unassignedShipments()->get()); // where('status', Shipment::STATUS_UNASSIGNED)->get()
+        return view('shipments.index', compact('shipments', 'users'));
     }
 
     /**
@@ -128,5 +131,18 @@ class ShipmentController extends Controller
     public function destroy(Shipment $shipments)
     {
         //
+    }
+
+    public function assignUser(Request $request, Shipment $shipment) : RedirectResponse
+    {
+        $request->validate(['user_id' => 'required|exists:users,id']);
+
+        $shipment->user_id = $request->user_id;
+        $shipment->status = Shipment::STATUS_IN_PROGRESS;
+        $shipment->save();
+
+        //Cache::forget('unassignedShipments');
+
+        return redirect()->back();
     }
 }

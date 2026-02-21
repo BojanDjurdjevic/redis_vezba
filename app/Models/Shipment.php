@@ -13,7 +13,7 @@ class Shipment extends Model
     const STATUS_UNASSIGNED = "unassigned";
     const STATUS_COMPLETED = 'completed';
     const STATUS_PROBLEM = 'problem';
-    const STATUS_IN_PROGRESS = 'in_progress';
+    const STATUS_IN_PROGRESS = 'started';
 
     const ALLOWED_STATUSES = [
         self::STATUS_UNASSIGNED,
@@ -36,6 +36,14 @@ class Shipment extends Model
             if($shipment->status === self::STATUS_UNASSIGNED) {
                 Cache::forget('unassigned_shipments');
             }
+        }); 
+
+        static::updated(function($shipment) {
+            Cache::forget('unassigned_shipments');
+        }); 
+
+        static::deleted(function($shipment) {
+            Cache::forget('unassigned_shipments');
         }); 
     }
 
@@ -61,6 +69,11 @@ class Shipment extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'client_id', 'id');
+    }
+
+    public function scopeUnassignedShipments($query)
+    {
+        return $query->where('status', self::STATUS_UNASSIGNED);
     }
 
 }

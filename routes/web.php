@@ -14,7 +14,10 @@ Route::controller(ProductController::class)->prefix('product')->name('product.')
     Route::get('/flush', 'flush')->name('flush');
 });
 
-Route::resource('shipments', ShipmentController::class);
+Route::resource('shipments', ShipmentController::class)->parameters(['shipments' => 'shipment']);
+
+Route::post('/shipments/{shipment}/assignUser', [ShipmentController::class, 'assignUser'])->name('shipments.assignUser');
+
 /*
 Route::get('/', function () {
     return view('welcome');
