@@ -1,47 +1,66 @@
-<x-app-layout title="Create Shipment">
+<?php
 
-    <livewire:create-shipment />
+use Livewire\Component;
 
+new class extends Component
+{
+    public string $title;
+    public string $from_country;
+    public string $from_city;
+    public string $to_country;
+    public string $to_city;
+    public string $details;
+    public array $statuses = [];
+    public string $status;
+    public int $price;
+
+    public $clients;
+    public int $client_id;
+
+    public string $clientError;
+
+    public function validateUser()
+    {
+        $user = App\Models\User::firstWhere('id', $this->client_id);
+
+        $this->clientError = $user ? '' : "Ovaj korisnik ne postoji";
+    }
+
+    public function mount()
+    {
+        $this->statuses = App\Models\Shipment::ALLOWED_STATUSES;
+        $this->clients = App\Models\User::where('role', 'client')->get();
+    }
+};
+?>
+
+<div>
     <div class="max-w-3xl mx-auto">
 
-        <div class="dark:bg-gray-800 text-white shadow-lg rounded-2xl p-8">
-
-            <h1 class="text-2xl font-bold mb-6">Kreiraj pošiljku</h1>
-
-            <form action="{{ route('shipments.store') }}" enctype="multipart/form-data" method="POST" class="space-y-6">
-                @csrf
-                {{-- TITLE --}}
+    <div class="dark:bg-gray-800 text-white shadow-lg rounded-2xl p-8">
+    <form action="">
+        {{-- TITLE --}}
                 <div>
                     <label for="title" class="block text-sm font-medium mb-1">Naslov</label>
-                    <input type="text" name="title" id="title"
-                        value="{{ old('title') }}"
+                    <input type="text" id="title"
+                        wire:model.live="title"
                         class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     >
-                    @error('title')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <p>{{ $title }}</p>
                 </div>
 
                 {{-- FROM --}}
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Iz države</label>
-                        <input type="text" name="from_country"
-                            value="{{ old('from_country') }}"
+                        <input type="text" wire:model="from_country"
                             class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        @error('from_country')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-1">Iz grada</label>
-                        <input type="text" name="from_city"
-                            value="{{ old('from_city') }}"
+                        <input type="text" wire:model="from_city"
                             class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        @error('from_city')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
 
@@ -49,34 +68,22 @@
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">U državu</label>
-                        <input type="text" name="to_country"
-                            value="{{ old('to_country') }}"
+                        <input type="text" wire:model="to_country"
                             class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        @error('to_country')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-1">U grad</label>
-                        <input type="text" name="to_city"
-                            value="{{ old('to_city') }}"
+                        <input type="text" wire:model="to_city"
                             class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        @error('to_city')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
 
                 {{-- PRICE --}}
                 <div>
                     <label class="block text-sm font-medium mb-1">Cena (RSD)</label>
-                    <input type="number" name="price" min="0"
-                        value="{{ old('price') }}"
+                    <input type="number" wire:model="price" min="0"
                         class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    @error('price')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 {{-- IMAGES --}}
@@ -96,49 +103,45 @@
                                     focus:outline-none focus:ring-2 focus:ring-indigo-500
                                     bg-white dark:bg-gray-700"
                         >
-                    @error('documents')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
                 <label for="status" class="block text-sm font-medium mb-1">Status:</label>
-                <select type="hidden" name="status" id="status" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" >
+                <select type="hidden" wire:model="status" id="status" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" >
                     <!--
                     <option value="in_progress">In progress</option>
                     <option value="unassigned">Unassigned</option>
                     <option value="problem">Problem</option>
                     <option value="completed">Completed</option>
                     -->
-                    @foreach (\App\Models\Shipment::ALLOWED_STATUSES as $status)
-                         <option class="text-indigo-600" value="{{ $status }}">{{ strtoupper($status) }}</option>                       
-                    @endforeach
+                    @foreach ($statuses as $s)
+                        <option class="text-indigo-600" value="{{ $s }}">{{ $s }}</option>                       
+                    @endforeach                
                 </select>
 
                 {{-- DETAILS --}}
                 <div>
                     <label class="block text-sm font-medium mb-1">Detalji</label>
-                    <textarea name="details" rows="4"
-                        class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">{{ old('details') }}</textarea>
-                    @error('details')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <textarea wire:model="details" rows="4"
+                        class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
                 </div>
 
                 {{-- CLIENT --}}
                 <div>
+                    <p class="text-red-600">{{ $clientError }}</p>
                     <label for="client_id" class="block text-sm font-medium mb-1">Klijent:</label>
                     <select name="client_id" id="client_id" class="w-full border rounded-lg px-4 py-2 
                             focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
+                            wire:model.live="client_id" 
+                            wire:blur="validateUser"
                     >
-                        <option value="" selected>Izaberi klijenta</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}"
-                                class="text-indigo-600"
-                            >{{ $user->name }}</option>                       
+                        <option value="202" selected >Izaberi klijenta</option>
+                        <option value="5000">Nepostojeći</option>
+                        @foreach ($this->clients as $client)
+                            <option value="{{ $client->id }}"
+                                class="text-indigo-700"    
+                            >{{ $client->name }}</option>
                         @endforeach
                     </select>
-                    @error('client_id')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    
                 </div>
 
                 {{-- SUBMIT --}}
@@ -149,11 +152,7 @@
                         Sačuvaj pošiljku
                     </button>
                 </div>
-
-            </form>
-
-        </div>
-
+    </form>
     </div>
-
-</x-app-layout>
+    </div>
+</div>

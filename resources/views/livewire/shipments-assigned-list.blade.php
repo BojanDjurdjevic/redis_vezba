@@ -23,12 +23,17 @@ new class extends Component
             $this->error = "Ne možete smanjiti ispod nule!";
         }
     }
+
+    public function validateAmount()
+    {
+        $this->error = $this->amount < 1 ? "Amount ne može biti manji od 1" : '';
+    }
 };
 ?>
 
 <div>
     <p class="text-red-500">{{ $error }}</p>
-    <p class="text-white">Clicked times: {{ $count }}</p>
+    <p class="text-white">Clicked times: <span class="{{ $count < 3000 ? 'text-white' : 'text-red-600' }}">{{ $count }}</span></p>
     <button wire:click="increment" class="bg-indigo-600 text-white p-3">
         Povećaj
     </button>
@@ -36,7 +41,7 @@ new class extends Component
         Smanji
     </button>
 
-    <input type="number" min="1" wire:model.live="amount"
+    <input type="number" min="1" wire:blur="validateAmount" wire:model.live="amount"
         class="border border-white text-white p-3"
     >
     <p class="text-white">Amount is: {{ $amount }}</p>
