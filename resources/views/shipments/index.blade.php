@@ -85,6 +85,9 @@
 
         </div>
 
+        <livewire:shipments-assigned-list />
     </div>
+
+    
 
 </x-app-layout>
