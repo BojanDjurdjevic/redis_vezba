@@ -1,9 +1,14 @@
 <?php
 
 use Livewire\Component;
+use App\Services\ShipmentService;
+use App\Http\Requests\ShipmentCreateRequest;
 
 new class extends Component
 {
+    use Livewire\WithFileUploads;
+
+
     public string $title;
     public string $from_country;
     public string $from_city;
@@ -19,17 +24,37 @@ new class extends Component
 
     public string $clientError;
 
+    public array $documents;
+
     public function validateUser()
     {
+        /*
         $user = App\Models\User::firstWhere('id', $this->client_id);
 
-        $this->clientError = $user ? '' : "Ovaj korisnik ne postoji";
+        $this->clientError = $user ? '' : "Ovaj korisnik ne postoji"; */
+
+        $this->validate([
+            'client_id' => 'required|integer|exists:users,id'
+        ]);
     }
 
     public function mount()
     {
         $this->statuses = App\Models\Shipment::ALLOWED_STATUSES;
         $this->clients = App\Models\User::where('role', 'client')->get();
+    }
+
+    public function submit(ShipmentService $service)
+    {
+        $request = new ShipmentCreateRequest();
+
+        $data = $this->validate($request->rules());
+
+        //dd($data);
+
+        $service->store($data);
+
+        return redirect()->route('shipments.index')->with('success', 'Uspešno ste kreirali pošiljku!');
     }
 };
 ?>
@@ -38,7 +63,12 @@ new class extends Component
     <div class="max-w-3xl mx-auto">
 
     <div class="dark:bg-gray-800 text-white shadow-lg rounded-2xl p-8">
-    <form action="">
+    <form action="" wire:submit="submit">
+
+        @foreach ($errors->all() as $error)
+            {{ $error }}
+        @endforeach
+
         {{-- TITLE --}}
                 <div>
                     <label for="title" class="block text-sm font-medium mb-1">Naslov</label>
@@ -89,7 +119,7 @@ new class extends Component
                 {{-- IMAGES --}}
                 <div>
                     <label class="block text-sm font-medium mb-1">Dokumenta</label>
-                    <input type="file" name="documents[]" multiple required
+                    <input type="file" wire:model="documents" multiple required
                         class="block w-full text-sm text-gray-900 dark:text-gray-300
                                     file:mr-4 file:py-2 file:px-4
                                     file:rounded-lg file:border-0
@@ -104,16 +134,11 @@ new class extends Component
                                     bg-white dark:bg-gray-700"
                         >
                 </div>
+                {{-- STATUS --}}
                 <label for="status" class="block text-sm font-medium mb-1">Status:</label>
-                <select type="hidden" wire:model="status" id="status" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" >
-                    <!--
-                    <option value="in_progress">In progress</option>
-                    <option value="unassigned">Unassigned</option>
-                    <option value="problem">Problem</option>
-                    <option value="completed">Completed</option>
-                    -->
+                <select wire:model="status" id="status" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" >
                     @foreach ($statuses as $s)
-                        <option class="text-indigo-600" value="{{ $s }}">{{ $s }}</option>                       
+                        <option class="text-indigo-600" {{ $s == 'unassigned' ? 'selected' : '' }} value="{{ $s }}">{{ $s }}</option>                       
                     @endforeach                
                 </select>
 
@@ -126,6 +151,9 @@ new class extends Component
 
                 {{-- CLIENT --}}
                 <div>
+                    @error('client_id')
+                        <p>{{ $message }}</p>
+                    @enderror
                     <p class="text-red-600">{{ $clientError }}</p>
                     <label for="client_id" class="block text-sm font-medium mb-1">Klijent:</label>
                     <select name="client_id" id="client_id" class="w-full border rounded-lg px-4 py-2 
@@ -133,8 +161,7 @@ new class extends Component
                             wire:model.live="client_id" 
                             wire:blur="validateUser"
                     >
-                        <option value="202" selected >Izaberi klijenta</option>
-                        <option value="5000">Nepostojeći</option>
+                        <option value="0" selected >Izaberi klijenta</option>
                         @foreach ($this->clients as $client)
                             <option value="{{ $client->id }}"
                                 class="text-indigo-700"    
@@ -146,7 +173,7 @@ new class extends Component
 
                 {{-- SUBMIT --}}
                 <div>
-                    <button type="submit"
+                    <button 
                         class="w-full bg-purple-700 text-white py-3 rounded-xl font-semibold
                                hover:bg-purple-900 transition duration-200 shadow-md hover:shadow-lg">
                         Sačuvaj pošiljku
